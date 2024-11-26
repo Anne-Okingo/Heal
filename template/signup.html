@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup - Therapy Platform</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f3f4fd;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background: #fff;
+            padding: 50px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .show-password {
+            display: flex;
+            align-items: center;
+            justify-content:flex-start;
+            gap: 4px;
+            font-size: 14px;
+            margin: 2px 0 10px;
+        }
+
+        .show-password input[type="checkbox"] {
+            width: auto;
+            margin: 10;
+            cursor: pointer;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background: #0056b3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #004494;
+        }
+
+        .link {
+            text-align: center;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Signup</h1>
+        <form action="/signup" method="POST">
+            <input type="text" name="name" placeholder="Enter Username" required>
+            <input type="password" id="psw" name="password" placeholder="Enter Password" required>
+            <input type="password" id="confirm_psw" name="confirm_psw" placeholder="Confirm Password" required>
+
+            <!-- Show password section aligned on one line -->
+            <div class="show-password">
+                <input type="checkbox" id="showPassword">
+                <label for="showPassword">Show Password</label>
+            </div>
+
+            <button type="submit">Signup</button>
+        </form>
+        <div class="link">
+            <a href="/login">Already have an account? Login</a>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('showPassword').addEventListener('change', function () {
+            var passwordInput = document.getElementById('psw');
+            var confirmPasswordInput = document.getElementById('confirm_psw');
+            if (this.checked) {
+                passwordInput.type = 'text';
+                confirmPasswordInput.type = 'text';
+            } else {
+                passwordInput.type = 'password';
+                confirmPasswordInput.type = 'password';
+            }
+        });
+    </script>
+</body>
+
+</html>
