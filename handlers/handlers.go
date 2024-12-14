@@ -287,3 +287,46 @@ func LogoutHandler(w http.ResponseWriter, r *http.Request) {
 	// Respond with a success message
 	w.WriteHeader(http.StatusOK)
 }
+
+func GetUsernameHandler(w http.ResponseWriter, r *http.Request) {
+	// Get session ID from the cookies
+	cookie, err := r.Cookie("session_id")
+	if err != nil {
+		http.Error(w, "Unauthorized: Missing session ID", http.StatusUnauthorized)
+		return
+	}
+
+	sessionID := cookie.Value
+
+	// Open the database connection
+	db, err := sql.Open("sqlite3", "./Heal.db")
+	if err != nil {
+		log.Printf("Error opening database: %v", err)
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		return
+	}
+	defer db.Close()
+
+	// Query to fetch the username based on the session ID
+	var username string
+	query := `
+		SELECT users.username 
+		FROM users 
+		INNER JOIN sessions ON users.id = sessions.user_id 
+		WHERE sessions.session_id = ?
+	`
+	err = db.QueryRow(query, sessionID).Scan(&username)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			http.Error(w, "Unauthorized: Invalid session ID", http.StatusUnauthorized)
+			return
+		}
+		log.Printf("Error querying database: %v", err)
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		return
+	}
+
+	// Respond with the username in JSON format
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]string{"username": username})
+}
