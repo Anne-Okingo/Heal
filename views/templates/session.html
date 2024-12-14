@@ -215,3 +215,14 @@
                 logoutButton.textContent = "Logout";
             }
         }
+        // Attach event listener to the logout button
+        document
+            .getElementById("logoutButton")
+            .addEventListener("click", handleLogout);
+
+        // Call the fetchUsername function on page load
+        fetchUsername();
+    </script>
+</body>
+
+</html>
