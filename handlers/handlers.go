@@ -523,3 +523,35 @@ func SessionHandler(w http.ResponseWriter, r *http.Request) {
 
 	renders.RenderTemplate(w, "Sessions.page.html", nil)
 }
+
+func HomeHandler(w http.ResponseWriter, r *http.Request) {
+	defer func() {
+		if err := recover(); err != nil {
+			log.Printf("Error in HomeHandler: %v", err)
+			http.Error(w, fmt.Sprintf("Internal server error: %v", err), http.StatusInternalServerError)
+		}
+	}()
+
+	db, err := sql.Open("sqlite3", "./Heal.db")
+	if err != nil {
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		return
+	}
+	defer db.Close()
+
+	// Get session ID from cookies
+	cookie, err := r.Cookie("session_id")
+	if err == nil {
+		// If the cookie exists, validate the session
+		var expiresAt time.Time
+		var userID int
+		err := db.QueryRow("SELECT user_id, expires_at FROM sessions WHERE session_id = ?", cookie.Value).Scan(&userID, &expiresAt)
+		if err == nil && expiresAt.After(time.Now()) {
+			// Valid session: redirect to /session
+			http.Redirect(w, r, "/session", http.StatusFound)
+			return
+		}
+	}
+
+	renders.RenderTemplate(w, "Index.page.html", nil)
+}
