@@ -4,14 +4,13 @@ import (
 	"fmt"
 	"net/http"
 
-	"Heal/internals/handlers"
 	"Heal/internals/routes"
 	"Heal/utils"
 )
 
 func main() {
 	// Initialize the database connection
-	handlers.Getdb("./Heal.db")
+	utils.Getdb("./Heal.db")
 
 	mux := http.NewServeMux()
 	routes.RegisterRoutes(mux)
