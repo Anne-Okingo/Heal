@@ -77,7 +77,7 @@ This application serves as an empathetic, non-judgmental, and empowering AI ment
 2. **Set Up the Backend**:
    Navigate to the `backend` folder:
    ```bash
-   cd backend
+   cd cmd
 
 3. **Run the Go application**:
    ```bash
