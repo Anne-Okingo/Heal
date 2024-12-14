@@ -13,7 +13,9 @@ import (
 
 	"Heal/internals/renders"
 
+	"github.com/google/uuid"
 	"github.com/joho/godotenv"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type GeminiRequest struct {
@@ -329,4 +331,76 @@ func GetUsernameHandler(w http.ResponseWriter, r *http.Request) {
 	// Respond with the username in JSON format
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]string{"username": username})
+}
+
+// login handler
+func LoginHandler(w http.ResponseWriter, r *http.Request) {
+	db, err := sql.Open("sqlite3", "./Heal.db")
+	if err != nil {
+		log.Fatalf("Failed to connect to database: %v", err)
+	}
+	if r.Method != http.MethodPost {
+		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
+		return
+	}
+
+	// Parse request body
+	var user User
+	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
+		http.Error(w, "Invalid request payload", http.StatusBadRequest)
+		return
+	}
+
+	// Validate input
+	if user.Name == "" || user.Password == "" {
+		http.Error(w, "Name and password are required", http.StatusBadRequest)
+		return
+	}
+
+	// Query database for user
+	var storedPassword string
+	var userID int
+	err = db.QueryRow("SELECT id,password FROM users WHERE username = ?", user.Name).Scan(&userID, &storedPassword)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			http.Error(w, "Invalid username or password", http.StatusUnauthorized)
+			return
+		}
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		fmt.Println("Database error:", err)
+		return
+	}
+
+	// Compare hashed password
+	if err := bcrypt.CompareHashAndPassword([]byte(storedPassword), []byte(user.Password)); err != nil {
+		http.Error(w, "Invalid username or password", http.StatusUnauthorized)
+		return
+	}
+
+	// Generate a session ID
+	sessionID := uuid.NewString()
+	expiresAt := time.Now().Add(24 * time.Hour) // Session expires in 24 hours
+
+	// Store session in database
+	_, err = db.Exec("INSERT INTO sessions (session_id, user_id, expires_at) VALUES (?, ?, ?)", sessionID, userID, expiresAt)
+	if err != nil {
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		fmt.Println("Database error:", err)
+		return
+	}
+
+	// Set the session ID as a cookie
+	http.SetCookie(w, &http.Cookie{
+		Name:     "session_id",
+		Value:    sessionID,
+		Path:     "/",
+		Expires:  expiresAt,
+		HttpOnly: true, // Prevent JavaScript access
+	})
+
+	// Successful login
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(map[string]string{
+		"message": "Login successful",
+	})
 }
