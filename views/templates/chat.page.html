@@ -97,74 +97,78 @@
     </div>
 
     <script>
-        // Speech Recognition Setup
-        const output = document.getElementById('output');
-        const startButton = document.getElementById('startListening');
-        const stopButton = document.getElementById('stopListening');
+       // Speech Recognition Setup
+const output = document.getElementById('output');
+const startButton = document.getElementById('startListening');
+const stopButton = document.getElementById('stopListening');
 
-        // Check if browser supports SpeechRecognition
-        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+// Check if browser supports SpeechRecognition
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
-        if (SpeechRecognition) {
-            const recognition = new SpeechRecognition();
+if (SpeechRecognition) {
+    const recognition = new SpeechRecognition();
 
-            recognition.continuous = true; // Keep recognizing until stopped
-            recognition.interimResults = false; // Only final results
+    recognition.continuous = true; // Keep recognizing until stopped
+    recognition.interimResults = false; // Only final results
 
-            let isSpeaking = false;
+    let isSpeaking = false;
 
-            recognition.onstart = () => {
-                startButton.style.display = 'none';
-                stopButton.style.display = 'inline-block';
-                output.innerHTML = "Listening...";
-                console.log("Voice recognition started.");
-            };
+    recognition.onstart = () => {
+        startButton.style.display = 'none';
+        stopButton.style.display = 'inline-block';
+        output.innerHTML = "Listening...";
+        console.log("Voice recognition started.");
+    };
 
-            recognition.onresult = async (event) => {
-              if (isSpeaking) return;
-                const transcript = event.results[event.resultIndex][0].transcript; // Get the recognized text
-                output.innerHTML = `You said: ${transcript}\n\n`;
+    recognition.onresult = async (event) => {
+        if (isSpeaking) return;
+        const transcript = event.results[event.resultIndex][0].transcript; // Get the recognized text
+        output.innerHTML = `You said: ${transcript}\n\n`;
 
-                try {
-                    // Get AI response
-                    const aiResponse = await getAIResponse(transcript);
+        try {
+            // Get AI response
+            const aiResponse = await getAIResponse(transcript);
 
-                    // Display and speak AI response
-                    output.innerHTML += `AI says: ${aiResponse}`;
+            // Display and speak AI response
+            output.innerHTML += `AI says: ${aiResponse}`;
 
-                    // Cancel ongoing speech and speak AI response
-                    if (window.speechSynthesis.speaking) {
-                        window.speechSynthesis.cancel();
-                    }
+            // Stop recognition before speaking
+            recognition.stop();
 
-                    isSpeaking = true;
-                    await speakResponseWithSpeechify(aiResponse);
-                    isSpeaking = false;
+            // Cancel ongoing speech and speak AI response
+            if (window.speechSynthesis.speaking) {
+                window.speechSynthesis.cancel();
+            }
 
-                } catch (error) {
-                    console.error("AI Response Error:", error);
-                    output.textContent += "\n\nSorry, there was an error processing your request.";
-                }
-            };
+            isSpeaking = true;
+            await speakResponseWithSpeechify(aiResponse);
+            isSpeaking = false;
 
-            recognition.onend = () => {
-              if (!isSpeaking) {
-                startButton.style.display = 'inline-block';
-                stopButton.style.display = 'none';
-                console.log("Voice recognition ended.");
-              }
-            };
-
-            startButton.onclick = () => {
-                recognition.start(); // Start listening
-            };
-
-            stopButton.onclick = () => {
-                recognition.stop(); // Stop listening
-            };
-        } else {
-            output.textContent = "Sorry, your browser does not support speech recognition.";
+        } catch (error) {
+            console.error("AI Response Error:", error);
+            output.textContent += "\n\nSorry, there was an error processing your request.";
         }
+    };
+
+    recognition.onend = () => {
+        if (!isSpeaking) {
+            startButton.style.display = 'inline-block';
+            stopButton.style.display = 'none';
+            console.log("Voice recognition ended.");
+        }
+    };
+
+    startButton.onclick = () => {
+        recognition.start(); // Start listening
+    };
+
+    stopButton.onclick = () => {
+        recognition.stop(); // Stop listening
+    };
+} else {
+    output.textContent = "Sorry, your browser does not support speech recognition.";
+}
+
 
         // AI Response Function
         async function getAIResponse(userText) {
