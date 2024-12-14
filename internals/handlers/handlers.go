@@ -15,6 +15,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/joho/godotenv"
+	_ "github.com/mattn/go-sqlite3"
 	"golang.org/x/crypto/bcrypt"
 )
 
