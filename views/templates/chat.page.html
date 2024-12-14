@@ -129,6 +129,52 @@
             console.log(data.candidates[0].content.parts[0].text);
             return data.candidates[0].content.parts[0].text; // Adjust based on actual API response structure
         }
+
+        async function speakResponseWithSpeechify(text) {
+            // const API_KEY = "{{.SPEECHIFY_API_KEY}}";  // Replace with your API key from Speechify
+            // const url = 'https://api.sws.speechify.com'; // Example endpoint (check their docs for correct endpoint)
+            const VOICE_ID = "henry";
+
+            try {
+                const response = await fetch('/api/speechify', {
+                    method: 'POST',
+                    headers: {
+                        // Authorization: `Bearer ${API_KEY}`,
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        input: `<speak>${text}</speak>`,
+                        voice_id: VOICE_ID,
+                        audio_format: "mp3",
+                    }),
+                });
+
+                if (!response.ok) {
+                    throw new Error('Speechify API request failed');
+                }
+
+                const data = await response.json();
+                const audioData = data.audio_data; // Assuming this is a base64 string
+
+                // Convert base64 string to Blob
+                const audioBlob = await fetch(`data:audio/mp3;base64,${audioData}`)
+                    .then(res => res.blob());
+
+                const audioUrl = URL.createObjectURL(audioBlob);
+                const audio = new Audio(audioUrl);
+
+                audio.play().catch(error => {
+                    console.error('Playback failed:', error);
+                    // Fallback to browser's speech synthesis
+                    window.speechSynthesis.speak(new SpeechSynthesisUtterance(text));
+                }); // Play the audio response
+                console.log("Speaking:", text);
+            } catch {
+                console.error('Speechify TTS Error');
+                // Fallback to browser's speech synthesis
+                window.speechSynthesis.speak(new SpeechSynthesisUtterance(text));
+            }
+        }
     </script>
 </body>
 
