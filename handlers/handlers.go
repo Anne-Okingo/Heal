@@ -555,3 +555,14 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 
 	renders.RenderTemplate(w, "Index.page.html", nil)
 }
+
+func DataPrivacyHandler(w http.ResponseWriter, r *http.Request) {
+	defer func() {
+		if err := recover(); err != nil {
+			log.Printf("Error in PrivacyHandler: %v", err)
+			http.Error(w, fmt.Sprintf("Internal server error: %v", err), http.StatusInternalServerError)
+		}
+	}()
+
+	renders.RenderTemplate(w, "Privacy.html", nil)
+}
