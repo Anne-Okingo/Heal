@@ -242,3 +242,48 @@ func WelcomeHandler(w http.ResponseWriter, r *http.Request) {
 
 	renders.RenderTemplate(w, "Welcome.page.html", nil)
 }
+
+func LogoutHandler(w http.ResponseWriter, r *http.Request) {
+	// Optionally, delete the session from the database (if necessary)
+	db, err := sql.Open("sqlite3", "./Heal.db")
+	if err != nil {
+		log.Printf("Error opening database: %v", err)
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		return
+	}
+	defer db.Close()
+
+	// You can access the session ID from the deleted cookie if needed
+	cookie, err := r.Cookie("session_id")
+	if err != nil {
+		http.Error(w, "Unauthorized: Missing session ID", http.StatusUnauthorized)
+		log.Printf("error getting session ID: %v", err)
+		return
+	}
+
+	sessionID := cookie.Value
+	if sessionID == "" {
+		http.Error(w, "Unauthorized: Empty session ID", http.StatusUnauthorized)
+		log.Printf("empty session ID")
+		return
+	}
+
+	_, err = db.Exec("DELETE FROM sessions WHERE session_id = ?", sessionID)
+	if err != nil {
+		log.Printf("Error deleting session: %v", err)
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		return
+	}
+
+	// Clear the session cookie
+	http.SetCookie(w, &http.Cookie{
+		Name:     "session_id",
+		Value:    "",
+		Path:     "/",
+		MaxAge:   -1, // Delete the cookie
+		HttpOnly: true,
+	})
+
+	// Respond with a success message
+	w.WriteHeader(http.StatusOK)
+}
