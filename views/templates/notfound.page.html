@@ -1,0 +1,16 @@
+{{template "base" .}}
+{{define "css"}}
+<link rel="stylesheet" href="../static/styles/new.css" />
+{{end}}
+
+{{define "title"}} NotFound {{end}}
+
+{{define "content"}}
+<div class="notfound-container">
+    <h1>404 Not Found 🧐</h1>
+    <a href="/" class="notfound" title="Go back to the home page">
+        <p>The resource you are looking for does not exist.</p>
+        <h1>Home</h1>
+    </a>
+</div>
+{{end}}
