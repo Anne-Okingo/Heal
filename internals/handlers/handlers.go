@@ -565,7 +565,7 @@ func DataPrivacyHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}()
 
-	renders.RenderTemplate(w, "Privacy.html", nil)
+	renders.RenderTemplate(w, "Privacy.page.html", nil)
 }
 
 type User struct {
