@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,47 +9,197 @@
 </head>
 <style>
     /* General Reset */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Arial', sans-serif;
-}
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Arial', sans-serif;
+    }
 
-/* Body Styling */
-body {
-    background-color: #f7f7f7;
-    color: #333;
-    line-height: 1.6;
-    padding: 0 20px;
-}
+    /* Body Styling */
+    body {
+        background-color: #f7f7f7;
+        color: #333;
+        line-height: 1.6;
+        padding: 0 20px;
+    }
 
-/* Header Styling */
-header {
-    background-color: #004080;
-    color: white;
-    padding: 15px 0;
-    text-align: center;
-}
+    /* Header Styling */
+    header {
+        background-color: #004080;
+        color: white;
+        padding: 15px 0;
+        text-align: center;
+    }
 
-header nav ul {
-    list-style: none;
-    display: flex;
-    justify-content: center;
-    margin: 0;
-}
+    header nav ul {
+        list-style: none;
+        display: flex;
+        justify-content: center;
+        margin: 0;
+    }
 
-header nav ul li {
-    margin: 0 15px;
-}
+    header nav ul li {
+        margin: 0 15px;
+    }
 
-header nav ul li a {
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
-    transition: color 0.3s ease;
-}
+    header nav ul li a {
+        color: white;
+        text-decoration: none;
+        font-weight: bold;
+        transition: color 0.3s ease;
+    }
 
-header nav ul li a:hover {
-    color: #ffcc00;
-}
+    header nav ul li a:hover {
+        color: #ffcc00;
+    }
+
+    p.warning {
+        color: #d9534f;
+        font-weight: bold;
+        background: #ffe6e6;
+        padding: 10px;
+        border-left: 4px solid #d9534f;
+        margin: 15px 0;
+        border-radius: 4px;
+    }
+
+
+    /* Main Content Styling */
+    main {
+        max-width: 800px;
+        margin: 30px auto;
+        padding: 25px;
+        background: white;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+    }
+
+    main h1 {
+        font-size: 2rem;
+        color: #004080;
+        margin-bottom: 15px;
+        text-align: center;
+    }
+
+    main h2 {
+        font-size: 1.5rem;
+        color: #333;
+        margin-bottom: 10px;
+        margin-top: 20px;
+    }
+
+    main p,
+    main ul {
+        margin: 10px 0;
+        text-align: justify;
+    }
+
+    main ul {
+        padding-left: 20px;
+        list-style-type: disc;
+    }
+
+    main ul li {
+        margin: 8px 0;
+    }
+
+    /* Highlight for Important Notes */
+    main h2,
+    main p.warning {
+        color: #d9534f;
+        font-weight: bold;
+    }
+
+    /* Footer Styling */
+    footer {
+        text-align: center;
+        background: #004080;
+        color: white;
+        padding: 10px 0;
+        margin-top: 30px;
+        font-size: 0.9rem;
+    }
+
+    footer p {
+        margin: 0;
+    }
+
+    /* Links */
+    a {
+        color: #004080;
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+
+    a:hover {
+        color: #ff6600;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        header nav ul {
+            flex-direction: column;
+        }
+
+        header nav ul li {
+            margin: 10px 0;
+        }
+
+        main {
+            padding: 20px;
+        }
+    }
+</style>
+
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="Index.html">Back</a></li>
+                <!-- <li><a href="about.html">About Us</a></li>
+                <li><a href="privacy.html">Privacy Policy</a></li>
+                <li><a href="therapy.html">Therapy</a></li> -->
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h1>Disclaimer</h1>
+        <p class="warning">This platform does not replace professional therapy or medical advice. If you are in
+            immediate danger, please seek help from local authorities or emergency services.</p>
+        <p>Welcome to Healing Together, a platform designed to support survivors of SGBV. Before you proceed, please
+            read and understand the following:</p>
+
+        <h2>General Information</h2>
+        <p>This platform is intended for educational and supportive purposes only. It is not a substitute for
+            professional medical or psychological advice, diagnosis, or treatment. If you are in crisis or require
+            immediate assistance, please contact local emergency services or a trusted healthcare provider.</p>
+
+        <h2>Use of Virtual Reality Therapy</h2>
+        <p>The VR therapy features offered on this platform are experimental and should be used with caution. While
+            designed to promote relaxation and healing, they may not be suitable for all individuals. If you experience
+            discomfort or distress while using VR therapy, please stop immediately and seek professional help.</p>
+
+        <h2>Anonymity and Data Usage</h2>
+        <p>You can interact with this platform anonymously. We take your privacy seriously and ensure all data is
+            encrypted and handled according to our Privacy Policy. However, it is your responsibility to safeguard your
+            anonymity while using shared devices or public networks.</p>
+
+        <h2>Limitations of Liability</h2>
+        <p>The creators of Healing Together are not liable for any emotional, physical, or psychological outcomes
+            resulting from the use of this platform. By using this platform, you agree to these terms and take full
+            responsibility for your engagement.</p>
+
+        <h2>Updates to the Disclaimer</h2>
+        <p>We may update this disclaimer periodically. Please review it regularly to stay informed about changes.</p>
+
+        <p>If you have any questions, feel free to <a href="contact.html">contact us</a>.</p>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Healing Together. All Rights Reserved.</p>
+    </footer>
+</body>
+
+</html>
