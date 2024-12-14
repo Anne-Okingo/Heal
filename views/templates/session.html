@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Heal</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: "Helvetica Neue", Arial, sans-serif;
+      background-color: #000000;
+      color: #333;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    .logo {
+      margin-bottom: 50px;
+    }
+
+    .logo img {
+      max-width: 250px;
+      height: auto;
+    }
+
+    .heading {
+      font-size: 60px;
+      font-weight: 900;
+      text-align: center;
+      margin-bottom: 30px;
+      color: rgb(144, 203, 235);
+    }
+
+    .user-info {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      font-size: 18px;
+      color: #fff;
+    }
+
+    .user-info span {
+      font-weight: bold;
+      color: #8db1ca;
+    }
+
+    #logoutButton {
+      margin-left: 10px;
+      padding: 5px 10px;
+      font-size: 14px;
+      color: #fff;
+      background-color: #007acc;
+      border: calc();
+      border-radius: 20px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    #logoutButton:hover {
+      background-color: #8db1ca;
+    }
+    spline-viewer {
+      z-index: 0;
+      /* Place the Spline viewer behind other elements */
+    }
+
+    .user-info {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      font-size: 18px;
+      color: #fff;
+      z-index: 10;
+      /* Ensure this is on top of the Spline viewer */
+      background-color: rgba(0,
+          0,
+          0,
+          0.5);
+      /* Optional: Add background for better visibility */
+      padding: 10px;
+      /* Optional: Add padding for spacing */
+      border-radius: 5px;
+      /* Optional: Rounded corners */
+    }
+
+    .cta-button {
+      display: inline-block;
+      font-size: 20px;
+      font-weight: bold;
+      padding: 15px;
+      color: #fff;
+      background-color: #007acc;
+      border-radius: 30px;
+      text-decoration: none;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .cta-button:hover {
+      background-color: #8db1ca;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .cta-button:active {
+      transform: scale(0.98);
+    }
+
+    .actions {
+      margin-top: 20px;
+      display: flex;
+      gap: 20px;
+      /* Space between buttons */
+    }
+
+    .actions .cta-button:active {
+      transform: scale(0.95);
+    }
+  </style>
