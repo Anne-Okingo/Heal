@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"net/http"
 
-	"Heal/internals/handlers" 
-	"Heal/internals/routes"   
-	"Heal/utils"              
+	"Heal/internals/handlers"
+	"Heal/internals/routes"
+	"Heal/utils"
 )
 
 func main() {
@@ -20,8 +20,8 @@ func main() {
 
 	// Create an HTTP server and handler
 	server := &http.Server{
-		Addr:    ":8080",    
-		Handler: wrappedMux,  
+		Addr:    ":8080",
+		Handler: wrappedMux,
 	}
 
 	fmt.Println("server running @http://localhost:8080\nTo stop server type 'exit'\n=====================================")

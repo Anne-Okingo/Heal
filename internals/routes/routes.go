@@ -1,9 +1,11 @@
 package routes
 
 import (
-	"Heal/internals/renders"
 	"net/http"
 	"strings"
+
+	"Heal/internals/handlers"
+	"Heal/internals/renders"
 )
 
 // Allowed routes
@@ -85,6 +87,6 @@ func RegisterRoutes(mux *http.ServeMux) {
 	})
 
 	mux.HandleFunc("/get-heard", func(w http.ResponseWriter, r *http.Request) {
-		handlers.ChatHAndler(w, r)
+		handlers.ChatHandler(w, r)
 	})
 }
