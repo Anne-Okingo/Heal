@@ -184,3 +184,34 @@
                 document.getElementById("username").textContent = "Guest";
             }
         }
+        async function handleLogout() {
+            const logoutButton = document.getElementById("logoutButton");
+
+            try {
+                // Disable the button to prevent multiple clicks
+                logoutButton.disabled = true;
+                logoutButton.textContent = "Logging out...";
+
+                const response = await fetch("/api/logout", {
+                    method: "POST",
+                    credentials: "include", // Include cookies in the request
+                });
+
+                if (response.ok) {
+                    // Redirect to the login page after successful logout
+                    window.location.href = "/welcome";
+                } else {
+                    console.error("Failed to log out:", response.statusText);
+                    alert("Logout failed. Please try again.");
+                }
+            } catch (error) {
+                console.error("Error during logout:", error);
+                alert(
+                    "An error occurred while logging out. Please check your connection and try again."
+                );
+            } finally {
+                // Re-enable the button and reset text if logout fails
+                logoutButton.disabled = false;
+                logoutButton.textContent = "Logout";
+            }
+        }
