@@ -74,12 +74,13 @@ This application serves as an empathetic, non-judgmental, and empowering AI ment
    git clone https://github.com/Anne-Okingo/Heal.git
    cd Heal
 
-2. **Set Up the Backend**:
-   Navigate to the `backend` folder:
+2. **Run the program from the root directory*:
    ```bash
-   cd cmd
+   go run ./cmd/
 
-3. **Run the Go application**:
+   ```
+
+   or 
    ```bash
-   go run main.go
-
+   make
+   ```
