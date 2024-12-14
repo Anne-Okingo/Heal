@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heal</title>
+    <link rel="stylesheet" href="static/styles.css" />
+</head>
+
+<body>
+    <div class="container"></div>
+    <h1 class="heading">Heal | Your Listening, Caring Partner</h1>
+    <button id="startListening" class="cta-button">Start Listening</button>
+    <button id="stopListening" class="cta-button" style="display:none;">Stop Listening</button>
+    <p id="output" style="color:white;"></p>
+    </div>
+    <!-- <a href="Welcome.html" id="ctaArrow" class="cta-button">&#8594;</a> -->
+    <script type="module" src="https://unpkg.com/@splinetool/viewer@1.9.48/build/spline-viewer.js"></script>
+    <spline-viewer url="https://prod.spline.design/P49iukE954gbcSBN/scene.splinecode"></spline-viewer>
+    </div>
+
+    <script>
+        // Speech Recognition Setup
+        const output = document.getElementById('output');
+        const startButton = document.getElementById('startListening');
+        const stopButton = document.getElementById('stopListening');
+
+        // Check if browser supports SpeechRecognition
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+        if (SpeechRecognition) {
+            const recognition = new SpeechRecognition();
+
+            recognition.continuous = true; // Keep recognizing until stopped
+            recognition.interimResults = false; // Only final results
+
+            let isSpeaking = false;
+
+            recognition.onstart = () => {
+                startButton.style.display = 'none';
+                stopButton.style.display = 'inline-block';
+                output.innerHTML = "Listening...";
+                console.log("Voice recognition started.");
+            };
+
+            recognition.onresult = async (event) => {
+              if (isSpeaking) return;
+                const transcript = event.results[event.resultIndex][0].transcript; // Get the recognized text
+                output.innerHTML = `You said: ${transcript}\n\n`;
+
+                try {
+                    // Get AI response
+                    const aiResponse = await getAIResponse(transcript);
+
+                    // Display and speak AI response
+                    output.innerHTML += `AI says: ${aiResponse}`;
+
+                    // Cancel ongoing speech and speak AI response
+                    if (window.speechSynthesis.speaking) {
+                        window.speechSynthesis.cancel();
+                    }
+
+                    isSpeaking = true;
+                    await speakResponseWithSpeechify(aiResponse);
+                    isSpeaking = false;
+
+                } catch (error) {
+                    console.error("AI Response Error:", error);
+                    output.textContent += "\n\nSorry, there was an error processing your request.";
+                }
+            };
+
+            recognition.onend = () => {
+              if (!isSpeaking) {
+                startButton.style.display = 'inline-block';
+                stopButton.style.display = 'none';
+                console.log("Voice recognition ended.");
+              }
+            };
+
+            startButton.onclick = () => {
+                recognition.start(); // Start listening
+            };
+
+            stopButton.onclick = () => {
+                recognition.stop(); // Stop listening
+            };
+        } else {
+            output.textContent = "Sorry, your browser does not support speech recognition.";
+        }
+
+        // AI Response Function
+        async function getAIResponse(userText) {
+            // const API_KEY = "{{.GEMINI_API_KEY}}"
+            const response = await fetch('/api/gemini', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    contents: [{
+                        role: 'user',
+                        parts: [{
+                            text: userText
+                        }]
+                    }],
+                    generationConfig: {
+                        // Configuration options
+                        maxOutputTokens: 300,
+                        temperature: 0.7,
+                        topP: 1.0,
+                        topK: 40
+                    },
+                    systemInstruction: {
+                        role: 'system',
+                        parts: [{
+                            text: "You are a compassionate AI therapist. Listen carefully, respond empathetically, and provide supportive guidance."
+                        }]
+                    }
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('AI API request failed');
+            }
+
+            const data = await response.json();
+            console.log(data.candidates[0].content.parts[0].text);
+            return data.candidates[0].content.parts[0].text; // Adjust based on actual API response structure
+        }
+    </script>
+</body>
+
+</html>
