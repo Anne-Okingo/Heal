@@ -8,110 +8,74 @@
     <link rel="stylesheet" href="static/styles.css" />
     <style>
         body {
-            /* background-image: url(Background.jpg); */
+            font-family: Arial, sans-serif;
+            /* background-color: #f5f7fa; */
             color: #333;
+            margin: 0;
+            padding: 0;
         }
 
         .container {
             width: 100%;
             max-width: 1200px;
-            height: 100%;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             padding: 20px;
-        }
-
-        .logo {
-            margin-bottom: 50px;
-        }
-
-        .logo img {
-            max-width: 250px;
-            height: auto;
+            position: relative;
         }
 
         .heading {
-            font-size: 60px;
-            font-weight: 2000;
+            font-size: 2.5rem;
+            font-weight: 600;
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             color: rgb(144, 203, 235);
-        }
-
-        .privacy-policy {
-            font-size: 16px;
-            color: #888686;
-            text-align: center;
-            max-width: 600px;
-            line-height: 1.6;
-            margin-bottom: 40px;
-        }
-
-        .privacy-policy a {
-            color: #007acc;
-            text-decoration: none;
-            font-weight: 500;
-        }
-
-        .privacy-policy a:hover {
-            text-decoration: underline;
-        }
-
-        .cta-button {
-            display: inline-block;
-            font-size: 20px;
-            font-weight: bold;
-            padding: 15px 15px;
-            color: #fff;
-            background-color: #007acc;
-            border-radius: 30px;
-            text-decoration: none;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            transition: all 0.3s ease;
-        }
-
-        .cta-button:hover {
-            background-color: #8db1ca;
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
-        }
-
-        .cta-button:active {
-            transform: scale(0.98);
         }
 
         #chat-container {
             width: 100%;
             max-width: 600px;
-            margin-top: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 10px;
+            /* background: white; */
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            position: relative;
         }
 
         #chat-box {
-            width: 100%;
-            height: 300px;
-            border: 1px solid #ddd;
-            padding: 10px;
-            overflow-y: scroll;
-            background-color: #f9f9f9;
+            height: 400px;
+            overflow-y: auto;
+            padding: 20px;
+            /* background-color: #f5f7fa; */
             display: flex;
             flex-direction: column;
-            justify-content: flex-end;
-            box-sizing: border-box;
+            position: relative;
+        }
+
+        #chat-box::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            /* background: #d3d3d3; */
+            z-index: 0;
+            transform: translateX(-50%);
         }
 
         .message {
-            max-width: 80%;
-            margin-bottom: 10px;
+            max-width: 75%;
+            margin: 10px 0;
             padding: 12px 16px;
-            border-radius: 15px;
+            border-radius: 20px;
             font-size: 16px;
             line-height: 1.5;
-            word-wrap: break-word;
+            position: relative;
+            z-index: 1;
         }
 
         .user-message {
@@ -119,34 +83,34 @@
             color: white;
             text-align: right;
             align-self: flex-end;
-            /* User message aligned to the right */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         .ai-message {
-            background-color: #f1f1f1;
+            background-color: #e1e5ea;
             color: #333;
             text-align: left;
             align-self: flex-start;
-            /* AI message aligned to the left */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         #user-input {
-            width: 100%;
+            width: calc(100% - 100px);
             padding: 10px;
-            margin-top: 10px;
-            border-radius: 15px;
             border: 1px solid #ccc;
+            border-radius: 5px;
             font-size: 16px;
+            margin-right: 10px;
+            box-sizing: border-box;
         }
 
         #send-chat {
-            width: 100%;
+            width: 80px;
             padding: 10px;
-            margin-top: 10px;
             background-color: #007acc;
             color: white;
             border: none;
-            border-radius: 15px;
+            border-radius: 5px;
             font-size: 16px;
             cursor: pointer;
         }
@@ -156,10 +120,25 @@
         }
 
         #voice-dropdown {
-            margin-top: 10px;
+            margin: 10px 0 20px;
             padding: 8px;
             font-size: 16px;
-            border-radius: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        /* Smooth scrolling for chat box */
+        #chat-box::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        #chat-box::-webkit-scrollbar-thumb {
+            background: #6262624d;
+            border-radius: 4px;
+        }
+
+        #chat-box::-webkit-scrollbar-thumb:hover {
+            background: #999;
         }
     </style>
 </head>
@@ -184,8 +163,10 @@
         <!-- Chat interface -->
         <div id="chat-container">
             <div id="chat-box"></div>
-            <input type="text" id="user-input" placeholder="Type a message..." />
-            <button id="send-chat" class="cta-button">Send</button>
+            <div style="display: flex; padding: 10px;">
+                <input type="text" id="user-input" placeholder="Type a message..." />
+                <button id="send-chat">Send</button>
+            </div>
         </div>
     </div>
 
@@ -231,16 +212,17 @@
             recognition.onresult = async (event) => {
                 if (isSpeaking) return;
                 const transcript = event.results[event.resultIndex][0].transcript; // Get the recognized text
-                chatBox.innerHTML = `You said: ${transcript}\n\n`;
+                chatBox.innerHTML += `<div class="message user-message"><strong>You:</strong> ${transcript}</div>`;
 
                 try {
                     // Get AI response
                     const aiResponse = await getAIResponse(transcript);
 
                     // Display and speak AI response
-                    chatBox.innerHTML += `AI says: ${aiResponse}`;
+                    chatBox.innerHTML += `<div class="message ai-message"><strong>Heal:</strong> ${aiResponse}</div>`;
 
                     recognition.stop();
+                    output.innerHTML = ''
                     // Cancel ongoing speech and speak AI response
                     if (window.speechSynthesis.speaking) {
                         window.speechSynthesis.cancel();
