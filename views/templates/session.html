@@ -2,131 +2,152 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Heal</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: "Helvetica Neue", Arial, sans-serif;
-      background-color: #000000;
-      color: #333;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Heal</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Helvetica Neue", Arial, sans-serif;
+            background-color: #000000;
+            color: #333;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
 
-    .container {
-      width: 100%;
-      max-width: 1200px;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-    }
-    .logo {
-      margin-bottom: 50px;
-    }
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
 
-    .logo img {
-      max-width: 250px;
-      height: auto;
-    }
+        .logo {
+            margin-bottom: 50px;
+        }
 
-    .heading {
-      font-size: 60px;
-      font-weight: 900;
-      text-align: center;
-      margin-bottom: 30px;
-      color: rgb(144, 203, 235);
-    }
+        .logo img {
+            max-width: 250px;
+            height: auto;
+        }
 
-    .user-info {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      font-size: 18px;
-      color: #fff;
-    }
+        .heading {
+            font-size: 60px;
+            font-weight: 900;
+            text-align: center;
+            margin-bottom: 30px;
+            color: rgb(144, 203, 235);
+        }
 
-    .user-info span {
-      font-weight: bold;
-      color: #8db1ca;
-    }
+        .user-info {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 18px;
+            color: #fff;
+        }
 
-    #logoutButton {
-      margin-left: 10px;
-      padding: 5px 10px;
-      font-size: 14px;
-      color: #fff;
-      background-color: #007acc;
-      border: calc();
-      border-radius: 20px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
+        .user-info span {
+            font-weight: bold;
+            color: #8db1ca;
+        }
 
-    #logoutButton:hover {
-      background-color: #8db1ca;
-    }
-    spline-viewer {
-      z-index: 0;
-      /* Place the Spline viewer behind other elements */
-    }
+        #logoutButton {
+            margin-left: 10px;
+            padding: 5px 10px;
+            font-size: 14px;
+            color: #fff;
+            background-color: #007acc;
+            border: calc();
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
 
-    .user-info {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      font-size: 18px;
-      color: #fff;
-      z-index: 10;
-      /* Ensure this is on top of the Spline viewer */
-      background-color: rgba(0,
-          0,
-          0,
-          0.5);
-      /* Optional: Add background for better visibility */
-      padding: 10px;
-      /* Optional: Add padding for spacing */
-      border-radius: 5px;
-      /* Optional: Rounded corners */
-    }
+        #logoutButton:hover {
+            background-color: #8db1ca;
+        }
 
-    .cta-button {
-      display: inline-block;
-      font-size: 20px;
-      font-weight: bold;
-      padding: 15px;
-      color: #fff;
-      background-color: #007acc;
-      border-radius: 30px;
-      text-decoration: none;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-      transition: all 0.3s ease;
-    }
+        spline-viewer {
+            z-index: 0;
+            /* Place the Spline viewer behind other elements */
+        }
 
-    .cta-button:hover {
-      background-color: #8db1ca;
-      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
-    }
+        .user-info {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 18px;
+            color: #fff;
+            z-index: 10;
+            /* Ensure this is on top of the Spline viewer */
+            background-color: rgba(0,
+                    0,
+                    0,
+                    0.5);
+            /* Optional: Add background for better visibility */
+            padding: 10px;
+            /* Optional: Add padding for spacing */
+            border-radius: 5px;
+            /* Optional: Rounded corners */
+        }
 
-    .cta-button:active {
-      transform: scale(0.98);
-    }
+        .cta-button {
+            display: inline-block;
+            font-size: 20px;
+            font-weight: bold;
+            padding: 15px;
+            color: #fff;
+            background-color: #007acc;
+            border-radius: 30px;
+            text-decoration: none;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
 
-    .actions {
-      margin-top: 20px;
-      display: flex;
-      gap: 20px;
-      /* Space between buttons */
-    }
+        .cta-button:hover {
+            background-color: #8db1ca;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
 
-    .actions .cta-button:active {
-      transform: scale(0.95);
-    }
-  </style>
+        .cta-button:active {
+            transform: scale(0.98);
+        }
+
+        .actions {
+            margin-top: 20px;
+            display: flex;
+            gap: 20px;
+            /* Space between buttons */
+        }
+
+        .actions .cta-button:active {
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Section to show logged-in user -->
+        <div class="user-info" id="userInfo">
+            Welcome, <span id="username">Loading...</span>!
+            <button id="logoutButton">Log out</button>
+        </div>
+
+        <h1 class="heading">Heal | Your Listening, Caring Partner</h1>
+
+        <div class="actions">
+            <button id="getHeard" class="cta-button">Get Heard</button>
+            <button id="talkChampion" class="cta-button">Talk to a Champion</button>
+        </div>
+
+        <p id="output" style="color: white"></p>
+    </div>
