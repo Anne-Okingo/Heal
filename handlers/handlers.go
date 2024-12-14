@@ -2,12 +2,16 @@ package handlers
 
 import (
 	"bytes"
+	"database/sql"
 	"encoding/json"
 	"fmt"
 	"io"
 	"log"
 	"net/http"
 	"os"
+	"time"
+
+	"Heal/internals/renders"
 
 	"github.com/joho/godotenv"
 )
@@ -202,3 +206,39 @@ func ProxySpeechifyRequest(w http.ResponseWriter, r *http.Request) {
 	w.Write(responseBody)
 }
 
+// Helper function to generate a guest session ID
+func generateGuestSessionID() string {
+	return fmt.Sprintf("guest-%d", time.Now().UnixNano())
+}
+
+func WelcomeHandler(w http.ResponseWriter, r *http.Request) {
+	defer func() {
+		if err := recover(); err != nil {
+			log.Printf("Error in WelcomeHandler: %v", err)
+			http.Error(w, fmt.Sprintf("Internal server error: %v", err), http.StatusInternalServerError)
+		}
+	}()
+
+	db, err := sql.Open("sqlite3", "./Heal.db")
+	if err != nil {
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		return
+	}
+	defer db.Close()
+
+	// Get session ID from cookies
+	cookie, err := r.Cookie("session_id")
+	if err == nil {
+		// If the cookie exists, validate the session
+		var expiresAt time.Time
+		var userID int
+		err := db.QueryRow("SELECT user_id, expires_at FROM sessions WHERE session_id = ?", cookie.Value).Scan(&userID, &expiresAt)
+		if err == nil && expiresAt.After(time.Now()) {
+			// Valid session: redirect to /session
+			http.Redirect(w, r, "/session", http.StatusFound)
+			return
+		}
+	}
+
+	renders.RenderTemplate(w, "Welcome.page.html", nil)
+}
