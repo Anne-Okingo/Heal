@@ -437,3 +437,57 @@ func Getdb(name string) (*sql.DB, error) {
 
 	return db, nil
 }
+
+// singup handler
+func SignupHandler(w http.ResponseWriter, r *http.Request) {
+	db, err := sql.Open("sqlite3", "./Heal.db")
+	if err != nil {
+		log.Fatalf("Failed to connect to database: %v", err)
+	}
+	Getdb("./Heal.db")
+	defer db.Close()
+	if r.Method != http.MethodPost {
+		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
+		return
+	}
+
+	// Parse the request body
+	var creds struct {
+		Name     string `json:"name"`
+		Password string `json:"password"`
+	}
+	if err := json.NewDecoder(r.Body).Decode(&creds); err != nil {
+		http.Error(w, "Invalid request payload", http.StatusBadRequest)
+		return
+	}
+
+	// Validate input
+	if creds.Name == "" || creds.Password == "" {
+		http.Error(w, `{"message": "Name and password are required"}`, http.StatusBadRequest)
+		return
+	}
+
+	// Hash the password using bcrypt
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(creds.Password), bcrypt.DefaultCost)
+	if err != nil {
+		log.Printf("Error hashing password: %v", err)
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		return
+	}
+
+	// Insert the new user into the database
+	query := `INSERT INTO users (username, password) VALUES (?, ?)`
+	_, err = db.Exec(query, creds.Name, hashedPassword)
+	if err != nil {
+		log.Printf("Database insert error: %v", err)
+		http.Error(w, `{"message": "Failed to create account. Username may already exist."}`, http.StatusConflict)
+		return
+	}
+
+	// Respond with success
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
+	json.NewEncoder(w).Encode(map[string]string{
+		"message": "Signup successful",
+	})
+}
