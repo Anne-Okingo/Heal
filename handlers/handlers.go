@@ -566,3 +566,28 @@ func DataPrivacyHandler(w http.ResponseWriter, r *http.Request) {
 
 	renders.RenderTemplate(w, "Privacy.html", nil)
 }
+
+type User struct {
+	Name     string `json:"name"`
+	Password string `json:"password"`
+}
+
+var guestSessions = make(map[string]string)
+
+// NotFoundHandler handles unknown routes; 404 status
+func NotFoundHandler(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusNotFound)
+	renders.RenderTemplate(w, "notfound.page.html", nil)
+}
+
+// BadRequestHandler handles bad requests routes
+func BadRequestHandler(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusBadRequest)
+	renders.RenderTemplate(w, "badrequest.page.html", nil)
+}
+
+// ServerErrorHandler handles server failures that result in status 500
+func ServerErrorHandler(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusInternalServerError)
+	renders.RenderTemplate(w, "serverError.page.html", nil)
+}
