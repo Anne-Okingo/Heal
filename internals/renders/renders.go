@@ -6,6 +6,11 @@ import (
 	"path/filepath"
 )
 
+// functions is a map of template functions
+var functions = template.FuncMap{}
+
+var temps = make(map[string]*template.Template)
+
 // getTemplateCache is a helper function to cache all HTML templates as a map
 func getTemplateCache() (map[string]*template.Template, error) {
 	myCache := map[string]*template.Template{}
