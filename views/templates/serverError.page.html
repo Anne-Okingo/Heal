@@ -1,0 +1,16 @@
+{{template "base" .}}
+{{define "css"}}
+<link rel="stylesheet" href="../static/styles/new.css" />
+{{end}}
+
+{{define "title"}} ServerError {{end}}
+
+{{define "content"}}
+<div class="notfound-container">
+    <h1>500 Oops Server Error! 🙁</h1>
+    <a href="/" class="notfound" title="Go back to the home page">
+        <p>Something Went wrong.</p>
+        <h1>Home</h1>
+    </a>
+</div>
+{{end}}
