@@ -625,3 +625,14 @@ func ChatHandler(w http.ResponseWriter, r *http.Request) {
 
 	renders.RenderTemplate(w, "chat.page.html", nil)
 }
+
+func ReportHandler(w http.ResponseWriter, r *http.Request) {
+	defer func() {
+		if err := recover(); err != nil {
+			log.Printf("Error in HomeHandler: %v", err)
+			http.Error(w, fmt.Sprintf("Internal server error: %v", err), http.StatusInternalServerError)
+		}
+	}()
+
+	renders.RenderTemplate(w, "reporting.page.html", nil)
+}
