@@ -491,3 +491,35 @@ func SignupHandler(w http.ResponseWriter, r *http.Request) {
 		"message": "Signup successful",
 	})
 }
+
+func SessionHandler(w http.ResponseWriter, r *http.Request) {
+	defer func() {
+		if err := recover(); err != nil {
+			log.Printf("Error in SessionHandler: %v", err)
+			http.Error(w, fmt.Sprintf("Internal server error: %v", err), http.StatusInternalServerError)
+		}
+	}()
+
+	// Check if a session_id cookie exists
+	cookie, err := r.Cookie("session_id")
+	if err != nil || cookie.Value == "" {
+		// Generate a guest session ID
+		guestSessionID := generateGuestSessionID()
+
+		// Store the guest session (for example, tracking purposes)
+		guestSessions[guestSessionID] = "guest"
+
+		// Set the session cookie
+		http.SetCookie(w, &http.Cookie{
+			Name:     "session_id",
+			Value:    guestSessionID,
+			Path:     "/",
+			HttpOnly: true,
+			Secure:   false, // Set to true if using HTTPS
+			Expires:  time.Now().Add(24 * time.Hour),
+		})
+		log.Printf("Assigned guest session ID: %s", guestSessionID)
+	}
+
+	renders.RenderTemplate(w, "Sessions.page.html", nil)
+}
