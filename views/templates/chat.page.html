@@ -2,12 +2,11 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Heal</title>
     <link rel="stylesheet" href="static/styles.css" />
     <style>
-        /* Your existing CSS styles */
         body {
             /* background-image: url(Background.jpg); */
             color: #333;
@@ -81,57 +80,167 @@
         .cta-button:active {
             transform: scale(0.98);
         }
+
+        #chat-container {
+            width: 100%;
+            max-width: 600px;
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px;
+        }
+
+        #chat-box {
+            width: 100%;
+            height: 300px;
+            border: 1px solid #ddd;
+            padding: 10px;
+            overflow-y: scroll;
+            background-color: #f9f9f9;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            box-sizing: border-box;
+        }
+
+        .message {
+            max-width: 80%;
+            margin-bottom: 10px;
+            padding: 12px 16px;
+            border-radius: 15px;
+            font-size: 16px;
+            line-height: 1.5;
+            word-wrap: break-word;
+        }
+
+        .user-message {
+            background-color: #007acc;
+            color: white;
+            text-align: right;
+            align-self: flex-end;
+            /* User message aligned to the right */
+        }
+
+        .ai-message {
+            background-color: #f1f1f1;
+            color: #333;
+            text-align: left;
+            align-self: flex-start;
+            /* AI message aligned to the left */
+        }
+
+        #user-input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 15px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+
+        #send-chat {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            background-color: #007acc;
+            color: white;
+            border: none;
+            border-radius: 15px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        #send-chat:hover {
+            background-color: #005fa3;
+        }
+
+        #voice-dropdown {
+            margin-top: 10px;
+            padding: 8px;
+            font-size: 16px;
+            border-radius: 10px;
+        }
     </style>
 </head>
 
 <body>
-    <div class="container"></div>
-    <h1 class="heading">Heal | Your Listening, Caring Partner</h1>
-    <button id="startListening" class="cta-button">Start Listening</button>
-    <button id="stopListening" class="cta-button" style="display:none;">Stop Listening</button>
-    <p id="output" style="color:white;"></p>
+    <div class="container">
+        <h1 class="heading">Heal | Your Listening, Caring Partner</h1>
+
+        <!-- Voice control dropdown -->
+        <select id="voice-dropdown">
+            <option value="henry">Henry (Male)</option>
+            <option value="alice">Alice (Female)</option>
+        </select>
+
+        <!-- Speech recognition buttons -->
+        <button id="startListening" class="cta-button">Start Listening</button>
+        <button id="stopListening" class="cta-button" style="display: none">
+            Stop Listening
+        </button>
+        <p id="output" style="color: white"></p>
+
+        <!-- Chat interface -->
+        <div id="chat-container">
+            <div id="chat-box"></div>
+            <input type="text" id="user-input" placeholder="Type a message..." />
+            <button id="send-chat" class="cta-button">Send</button>
+        </div>
     </div>
+
     <!-- <a href="Welcome.html" id="ctaArrow" class="cta-button">&#8594;</a> -->
     <script type="module" src="https://unpkg.com/@splinetool/viewer@1.9.48/build/spline-viewer.js"></script>
     <spline-viewer url="https://prod.spline.design/P49iukE954gbcSBN/scene.splinecode"></spline-viewer>
-    </div>
 
     <script>
         // Speech Recognition Setup
-        const output = document.getElementById('output');
-        const startButton = document.getElementById('startListening');
-        const stopButton = document.getElementById('stopListening');
+        const output = document.getElementById("output");
+        const startButton = document.getElementById("startListening");
+        const stopButton = document.getElementById("stopListening");
+        const userInput = document.getElementById("user-input");
+        const sendChatButton = document.getElementById("send-chat");
+        const chatBox = document.getElementById("chat-box");
+        const voiceDropdown = document.getElementById("voice-dropdown");
+
+        const SpeechRecognition =
+            window.SpeechRecognition || window.webkitSpeechRecognition;
+
+        let isSpeaking = false;
+        let currentVoice = "henry";
+
+        // Set default voice when dropdown changes
+        voiceDropdown.addEventListener("change", (event) => {
+            currentVoice = event.target.value;
+        });
 
         // Check if browser supports SpeechRecognition
-        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-
         if (SpeechRecognition) {
             const recognition = new SpeechRecognition();
 
             recognition.continuous = true; // Keep recognizing until stopped
             recognition.interimResults = false; // Only final results
 
-            let isSpeaking = false;
-
             recognition.onstart = () => {
-                startButton.style.display = 'none';
-                stopButton.style.display = 'inline-block';
+                startButton.style.display = "none";
+                stopButton.style.display = "inline-block";
                 output.innerHTML = "Listening...";
                 console.log("Voice recognition started.");
             };
 
             recognition.onresult = async (event) => {
-              if (isSpeaking) return;
+                if (isSpeaking) return;
                 const transcript = event.results[event.resultIndex][0].transcript; // Get the recognized text
-                output.innerHTML = `You said: ${transcript}\n\n`;
+                chatBox.innerHTML = `You said: ${transcript}\n\n`;
 
                 try {
                     // Get AI response
                     const aiResponse = await getAIResponse(transcript);
 
                     // Display and speak AI response
-                    output.innerHTML += `AI says: ${aiResponse}`;
+                    chatBox.innerHTML += `AI says: ${aiResponse}`;
 
+                    recognition.stop();
                     // Cancel ongoing speech and speak AI response
                     if (window.speechSynthesis.speaking) {
                         window.speechSynthesis.cancel();
@@ -140,19 +249,19 @@
                     isSpeaking = true;
                     await speakResponseWithSpeechify(aiResponse);
                     isSpeaking = false;
-
                 } catch (error) {
                     console.error("AI Response Error:", error);
-                    output.textContent += "\n\nSorry, there was an error processing your request.";
+                    output.textContent +=
+                        "\n\nSorry, there was an error processing your request.";
                 }
             };
 
             recognition.onend = () => {
-              if (!isSpeaking) {
-                startButton.style.display = 'inline-block';
-                stopButton.style.display = 'none';
-                console.log("Voice recognition ended.");
-              }
+                if (!isSpeaking) {
+                    startButton.style.display = "inline-block";
+                    stopButton.style.display = "none";
+                    console.log("Voice recognition ended.");
+                }
             };
 
             startButton.onclick = () => {
@@ -163,59 +272,66 @@
                 recognition.stop(); // Stop listening
             };
         } else {
-            output.textContent = "Sorry, your browser does not support speech recognition.";
+            output.textContent =
+                "Sorry, your browser does not support speech recognition.";
         }
 
         // AI Response Function
         async function getAIResponse(userText) {
-            // const API_KEY = "{{.GEMINI_API_KEY}}"
-            const response = await fetch('/api/gemini', {
-                method: 'POST',
+            const response = await fetch("/api/gemini", {
+                method: "POST",
                 headers: {
-                    'Content-Type': 'application/json'
+                    "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    contents: [{
-                        role: 'user',
-                        parts: [{
-                            text: userText
-                        }]
-                    }],
+                    contents: [
+                        {
+                            role: "user",
+                            parts: [
+                                {
+                                    text: userText,
+                                },
+                            ],
+                        },
+                    ],
                     generationConfig: {
                         // Configuration options
                         maxOutputTokens: 300,
                         temperature: 0.7,
                         topP: 1.0,
-                        topK: 40
+                        topK: 40,
                     },
                     systemInstruction: {
-                        role: 'system',
-                        parts: [{
-                            text: "You are a compassionate AI therapist. Listen carefully, respond empathetically, and provide supportive guidance."
-                        }]
-                    }
-                })
+                        role: "system",
+                        parts: [
+                            {
+                                text: `You are a compassionate AI therapist. Listen carefully, respond empathetically,
+ and provide supportive guidance. If the conversation strays from therapeutic topics,
+ gently steer it back to matters related to their emotional well-being. Always maintain
+ a calm, warm, and non-judgmental tone throughout the conversation.`,
+                            },
+                        ],
+                    },
+                }),
             });
 
             if (!response.ok) {
-                throw new Error('AI API request failed');
+                throw new Error("AI API request failed");
             }
 
             const data = await response.json();
             console.log(data.candidates[0].content.parts[0].text);
-            return data.candidates[0].content.parts[0].text; // Adjust based on actual API response structure
+            return data.candidates[0].content.parts[0].text;
         }
 
+        // Speak AI response with selected voice
         async function speakResponseWithSpeechify(text) {
-            // const API_KEY = "{{.SPEECHIFY_API_KEY}}";  // Replace with your API key from Speechify
-            // const url = 'https://api.sws.speechify.com'; // Example endpoint (check their docs for correct endpoint)
-            const VOICE_ID = "henry";
+            const VOICE_ID = currentVoice;
 
             try {
-                const response = await fetch('/api/speechify', {
-                    method: 'POST',
+                const response = await fetch("/api/speechify", {
+                    method: "POST",
                     headers: {
-                        // Authorization: `Bearer ${API_KEY}`,
                         "Content-Type": "application/json",
                     },
                     body: JSON.stringify({
@@ -226,31 +342,54 @@
                 });
 
                 if (!response.ok) {
-                    throw new Error('Speechify API request failed');
+                    throw new Error("Speechify API request failed");
                 }
 
                 const data = await response.json();
-                const audioData = data.audio_data; // Assuming this is a base64 string
+                const audioData = data.audio_data;
 
                 // Convert base64 string to Blob
-                const audioBlob = await fetch(`data:audio/mp3;base64,${audioData}`)
-                    .then(res => res.blob());
+                const audioBlob = await fetch(
+                    `data:audio/mp3;base64,${audioData}`
+                ).then((res) => res.blob());
 
                 const audioUrl = URL.createObjectURL(audioBlob);
                 const audio = new Audio(audioUrl);
 
-                audio.play().catch(error => {
-                    console.error('Playback failed:', error);
+                audio.play().catch((error) => {
+                    console.error("Playback failed:", error);
                     // Fallback to browser's speech synthesis
                     window.speechSynthesis.speak(new SpeechSynthesisUtterance(text));
                 }); // Play the audio response
                 console.log("Speaking:", text);
             } catch {
-                console.error('Speechify TTS Error');
+                console.error("Speechify TTS Error");
                 // Fallback to browser's speech synthesis
                 window.speechSynthesis.speak(new SpeechSynthesisUtterance(text));
             }
         }
+
+        // Chat functionality
+        sendChatButton.onclick = async () => {
+            const userMessage = userInput.value.trim();
+            if (userMessage) {
+                chatBox.innerHTML += `<div class="message user-message"><strong>You:</strong> ${userMessage}</div>`;
+                userInput.value = "";
+
+                // Scroll to bottom of chat box
+                chatBox.scrollTop = chatBox.scrollHeight;
+
+                try {
+                    const aiResponse = await getAIResponse(userMessage);
+                    chatBox.innerHTML += `<div class="message ai-message"><strong>Heal:</strong> ${aiResponse}</div>`;
+                    chatBox.scrollTop = chatBox.scrollHeight;
+
+                    await speakResponseWithSpeechify(aiResponse);
+                } catch (error) {
+                    console.error("Error getting AI response:", error);
+                }
+            }
+        };
     </script>
 </body>
 

@@ -277,8 +277,22 @@
   </div>
 
   <a href="/session" class="floating-btn">Join Anonymously</a>
-
+  
+  <!-- Audio element -->
+  <audio id="healAudio" src="../static/Welcome_ to Heal_Text_to_Speech_audio.mp3"></audio>
+  
   <!-- JavaScript -->
+
+  <script>
+      window.addEventListener('load', function (event) {
+        // no default navigation 
+        console.log('hearing')
+          // Play the audio
+          const audio = document.getElementById('healAudio')
+          audio.play();
+
+      });
+  </script>
   <script>
     // Page navigation
     const mainPage = document.getElementById("mainPage");
