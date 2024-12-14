@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report SGBV Incident</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #000000; /* Pure black background */
+            color: #f0f4f8; /* Soft white text */
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background-color: #111111; /* Slightly lighter black for contrast */
+            border-radius: 15px;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.7); /* Subtle shadow */
+            padding: 30px;
+            animation: fadeIn 1s ease-out;
+        }
+
+        h1 {
+            text-align: center;
+            color: #4bcffa; /* Calming blue */
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+        }
+
+        p {
+            font-size: 1rem;
+            text-align: center;
+            margin-bottom: 20px;
+            color: #b0bec5; /* Neutral grey-blue for text */
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-size: 1rem;
+            font-weight: 600;
+            margin: 10px 0 5px;
+            color: #dbe7f0; /* Light grey */
+        }
+
+        input, select, textarea {
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #333333; /* Subtle border for inputs */
+            border-radius: 8px;
+            font-size: 1rem;
+            background-color: #1a1a1a; /* Dark input field background */
+            color: #ffffff; /* White text for input */
+            transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            background-color: #222222; /* Slightly lighter focus background */
+            box-shadow: 0 0 8px rgba(75, 207, 250, 0.7); /* Teal blue glow */
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        button {
+            padding: 12px 20px;
+            background: linear-gradient(90deg, #4bcffa, #228be6); /* Soft blue gradient */
+            color: white;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        button:hover {
+            background: linear-gradient(90deg, #228be6, #4bcffa); /* Reverse gradient */
+            box-shadow: 0 0 15px rgba(75, 207, 250, 0.7); /* Subtle glow */
+        }
+
+        button:active {
+            background: #1e90ff;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        #confirmation-message {
+            margin-top: 20px;
+            background-color: rgba(75, 207, 250, 0.1); /* Teal overlay */
+            padding: 20px;
+            border: 1px solid #4bcffa;
+            border-radius: 8px;
+            color: #4bcffa;
+            font-size: 1rem;
+            text-align: center;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive design */
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            label, input, select, button {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Report an SGBV Incident</h1>
+        <p>Your voice matters. Please fill out this form, and we’ll ensure the right support reaches you.</p>
+
+        <form id="sgbv-form">
+            <label for="name">Your Name (Optional)</label>
+            <input type="text" id="name" name="name" placeholder="Enter your name">
+
+            <label for="contact">Contact Number (Optional)</label>
+            <input type="tel" id="contact" name="contact" placeholder="Enter your contact number">
+
+            <label for="incident">Brief Description of Incident</label>
+            <textarea id="incident" name="incident" rows="4" placeholder="Describe the incident"></textarea>
+
+            <label for="location">Location of Incident</label>
+            <input type="text" id="location" name="location" placeholder="Where did the incident happen?">
+
+            <label for="station">Preferred Police Station</label>
+            <select id="station" name="station">
+                <option value="Station1">Kondele Police Station</option>
+                <option value="Station2">Nyawita Police Station</option>
+                <option value="Station2">Obunga Police Station</option>
+            </select>
+
+            <label for="consent">Do you consent to share your details with the police?</label>
+            <input type="checkbox" id="consent" name="consent">
+            <label for="consent">Yes, I consent</label>
+
+            <button type="submit">Submit Report</button>
+        </form>
+
+        <div id="confirmation-message" class="hidden">
+            <h3>Thank you for your report. Help is on its way.</h3>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('sgbv-form').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const confirmationMessage = document.getElementById('confirmation-message');
+            confirmationMessage.classList.remove('hidden');
+            this.reset();
+        });
+    </script>
+</body>
+</html>
