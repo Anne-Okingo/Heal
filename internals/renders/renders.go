@@ -3,7 +3,9 @@ package renders
 import (
 	"fmt"
 	"html/template"
+	"os"
 	"path/filepath"
+	"strings"
 )
 
 // functions is a map of template functions
@@ -48,4 +50,14 @@ func getTemplateCache() (map[string]*template.Template, error) {
 	}
 	temps = myCache
 	return myCache, nil
+}
+
+// GetProjectRoot dynamically finds the project root directory
+func GetProjectRoot(first, second string) string {
+	cwd, _ := os.Getwd()
+	baseDir := cwd
+	if strings.HasSuffix(baseDir, "cmd") {
+		baseDir = filepath.Join(cwd, "../")
+	}
+	return filepath.Join(baseDir, first, second)
 }
