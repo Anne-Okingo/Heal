@@ -223,6 +223,8 @@
 
                     recognition.stop();
                     output.innerHTML = ''
+                    startButton.style.display = "inline-block";
+                    stopButton.style.display =  "none" ;
                     // Cancel ongoing speech and speak AI response
                     if (window.speechSynthesis.speaking) {
                         window.speechSynthesis.cancel();
