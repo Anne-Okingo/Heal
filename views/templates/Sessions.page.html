@@ -147,8 +147,13 @@
         <div class="actions">
             <button id="getHeard" class="cta-button">Get Heard</button>
             <button id="talkChampion" class="cta-button">Talk to a Champion</button>
+            <button id="report" class="cta-button">Report</button>
         </div>
 
+        <!-- <div  class="Report-butt">
+            <button id="report" class="cta-button">Report</button>
+        </div> -->
+        
         <p id="output" style="color: white"></p>
     </div>
     <!-- <script type="module" src="https://unpkg.com/@splinetool/viewer@1.9.48/build/spline-viewer.js"></script>
@@ -159,6 +164,11 @@
         // Event listener for "Get Heard" button
         document.getElementById("getHeard").addEventListener("click", () => {
             window.location.href = "/get-heard"; // Replace with the actual URL
+        });
+
+        // Event listener for "Get Heard" button
+        document.getElementById("report").addEventListener("click", () => {
+            window.location.href = "/report"; // Replace with the actual URL
         });
 
         // Event listener for "Talk to a Champion" button

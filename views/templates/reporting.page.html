@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heal | SGBV Case Reporting Form</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: #000000;
+            color: #0792f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .form-container {
+            width: 100%;
+            max-width: 800px;
+            background-color: rgba(246, 248, 250, 0.068);
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(245, 241, 241, 0.349)
+        }
+        .confidential-note {
+            background-color: rgba(255, 0, 0, 0.1);
+            border: 2px solid #6b6e6e;
+            color: #c5dff1;
+            padding: 15px;
+            margin-bottom: 30px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .form-section {
+            margin-bottom: 30px;
+        }
+        .form-section h3 {
+            color: #0792f5;
+            border-bottom: 2px solid #6b6e6e;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #8db1ca;
+            font-weight: bold;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            background-color: rgba(5, 5, 5, 0.1);
+            border: 1px solid #6b6e6e;
+            border-radius: 8px;
+            color: #3f4041;
+            transition: all 0.3s ease;
+        }
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #e8eef1;
+            /* box-shadow: 0 0 10px rgba(238, 240, 241, 0.658); */
+        }
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background-color: #007acc;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .submit-btn:hover {
+            background-color: #8db1ca;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+        .submit-btn:active {
+            transform: scale(0.98);
+        }
+        ::placeholder {
+            color: rgba(141, 177, 202, 0.7);
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <div class="confidential-note">
+            <strong>CONFIDENTIAL DOCUMENT</strong>
+            <p>This form is strictly confidential. All information will be handled with utmost sensitivity and privacy.</p>
+        </div>
+
+        <form id="sgbvReportForm">
+            <div class="form-section">
+                <h3>Personal Information</h3>
+                <div class="form-group">
+                    <label>ID (Optional):</label>
+                    <input type="text" name="patientId" placeholder="Enter ID if comfortable">
+                    
+                    <label>Date of Reporting:</label>
+                    <input type="date" name="reportDate" required>
+                    
+                    <label>Age:</label>
+                    <input type="number" name="patientAge" min="0" required placeholder="Your age">
+                    
+                    <label>Gender:</label>
+                    <select name="patientGender" required>
+                        <option value="">Select Gender</option>
+                        <option value="female">Female</option>
+                        <option value="male">Male</option>
+                        <option value="non-binary">Non-Binary</option>
+                        <option value="other">Other</option>
+                        <option value="prefer-not-to-say">Prefer Not to Say</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>Incident Details</h3>
+                <div class="form-group">
+                    <label>Date of Incident:</label>
+                    <input type="date" name="incidentDate">
+                    
+                    <label>Type of Violence:</label>
+                    <select name="violenceType" required>
+                        <option value="">Select Type</option>
+                        <option value="sexual-assault">Sexual Assault</option>
+                        <option value="rape">Rape</option>
+                        <option value="domestic-violence">Domestic Violence</option>
+                        <option value="sexual-harassment">Sexual Harassment</option>
+                        <option value="other">Other</option>
+                    </select>
+                    
+                    <label>Location of Incident:</label>
+                    <input type="text" name="incidentLocation" placeholder="Location details">
+                    
+                    <label>Hospital:</label>
+                    <select name="hospitalName" required>
+                        <option value="">Select Hospital</option>
+                        <option value="JOOTRH">JOOTRH</option>
+                        <option value="District">District</option>
+                        <option value="Avenue">Avenue</option>
+                        <option value="Usoma">Usoma Dispensary</option>
+                        <option value="Holo">Holo Kadawa Dispensary</option>
+                    </select>
+                    
+                    <label>Additional Incident Description:</label>
+                    <textarea name="incidentDescription" rows="4" placeholder="Please provide additional details about the incident"></textarea>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn">Submit Confidential Report</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('sgbvReportForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            alert('Report submitted securely. Your safety and confidentiality are our priority.');
+            // In a real application, this would send data to a secure backend
+        });
+    </script>
+</body>
+</html>
