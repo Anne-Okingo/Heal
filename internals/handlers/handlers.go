@@ -577,20 +577,7 @@ func ChatHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	defer db.Close()
 
-	// Get session ID from cookies
-	cookie, err := r.Cookie("session_id")
-	if err == nil {
-		// If the cookie exists, validate the session
-		var expiresAt time.Time
-		var userID int
-		err := db.QueryRow("SELECT user_id, expires_at FROM sessions WHERE session_id = ?", cookie.Value).Scan(&userID, &expiresAt)
-		if err == nil && expiresAt.After(time.Now()) {
-			fmt.Println("hello")
-			// Valid session: redirect to /session
-			http.Redirect(w, r, "/session", http.StatusFound)
-			return
-		}
-	}
+	
 
 	renders.RenderTemplate(w, "chat.page.html", nil)
 }
