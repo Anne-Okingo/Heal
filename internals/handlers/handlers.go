@@ -581,3 +581,5 @@ func ChatHandler(w http.ResponseWriter, r *http.Request) {
 
 	renders.RenderTemplate(w, "chat.page.html", nil)
 }
+
+//
