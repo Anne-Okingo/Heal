@@ -21,6 +21,7 @@ var allowedRoutes = map[string]bool{
 	"/api/gemini":       true,
 	"/api/speechify":    true,
 	"/get-heard":        true,
+	"/talk-to-champion": true,
 }
 
 // RouteChecker is a middleware that checkes allowed routes
@@ -89,4 +90,8 @@ func RegisterRoutes(mux *http.ServeMux) {
 	mux.HandleFunc("/get-heard", func(w http.ResponseWriter, r *http.Request) {
 		handlers.ChatHandler(w, r)
 	})
+
+	mux.HandleFunc("/talk-to-champion", func(w http.ResponseWriter, r *http.Request) {
+        handlers.ChatWithChampionHandler(w, r)
+    })
 }
