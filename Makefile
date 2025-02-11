@@ -1,2 +1,2 @@
 run:
-	@go run ./cmd
+	@go run .

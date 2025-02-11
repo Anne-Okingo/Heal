@@ -582,4 +582,21 @@ func ChatHandler(w http.ResponseWriter, r *http.Request) {
 	renders.RenderTemplate(w, "chat.page.html", nil)
 }
 
+func ChatWithChampionHandler(w http.ResponseWriter, r *http.Request) {
+	defer func() {
+        if err := recover(); err!= nil {
+            log.Printf("Error in HomeHandler: %v", err)
+            http.Error(w, fmt.Sprintf("Internal server error: %v", err), http.StatusInternalServerError)
+        }
+    }()
+
+    db, err := sql.Open("sqlite3", "./Heal.db")
+    if err!= nil {
+        http.Error(w, "Internal server error", http.StatusInternalServerError)
+        return
+    }
+    defer db.Close()
+
+    renders.RenderTemplate(w, "champions.page.html", nil)
+}
 //
